@@ -1,0 +1,22 @@
+schema{
+query: Query
+}
+
+type Query{
+getAllExam : [Exam],
+ getExamById(examId: Int!): Exam
+}
+
+type Exam{
+  	  examId : Int
+	  examName : String
+	  description : String
+	  minutes : Int,
+	  questions : [Question]
+}
+
+type Question{
+	questionId : Int
+	question : String
+	answer : String
+}

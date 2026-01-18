@@ -1,10 +1,12 @@
 schema{
-query: Query
+    query: Query
 }
 
 type Query{
-getAllExam : [Exam],
- getExamById(examId: Int!): Exam
+    getAllExam : [Exam],
+    getExamById(examId: Int!): Exam
+    getAllQuestions : [Question],
+    getQuestionById(questionId: Int!): Question
 }
 
 type Exam{

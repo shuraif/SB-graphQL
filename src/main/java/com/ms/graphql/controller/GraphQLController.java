@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import com.ms.graphql.entity.Question;
+import com.ms.graphql.repo.QuestionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -33,6 +35,9 @@ public class GraphQLController {
 
 	@Autowired
 	ExamRepo examRepo;
+
+	@Autowired
+	QuestionRepo questionRepo;
 	
 	@Value("classpath:exam.graphqls")
 	private Resource resource;
@@ -50,23 +55,32 @@ public class GraphQLController {
 	
 	private RuntimeWiring buildWiring() {
 		
-		DataFetcher<List<Exam>> fetcher1 = data->{
+		DataFetcher<List<Exam>> allExamFetcher = data->{
 			return (List<Exam>) examRepo.findAll();
 		};
 		
-		DataFetcher<Exam> fetcher2 = data->{
+		DataFetcher<Exam> examByIdFetcher = data->{
 			return (Exam) examRepo.findByExamId(data.getArgument("examId"));
+		};
+
+		DataFetcher<Question> questionByIdFetcher = data->{
+			return (Question) questionRepo.findByQuestionId(data.getArgument("questionId"));
+		};
+
+		DataFetcher<List<Question>> allQuestionsFetcher = data->{
+			return (List<Question>) questionRepo.findAll();
 		};
 		
 		return RuntimeWiring.newRuntimeWiring().type("Query",typeWriting->
-			typeWriting.dataFetcher("getAllExam", fetcher1).dataFetcher("getExamById",fetcher2)).				
-				build();
+			typeWriting
+					.dataFetcher("getAllExam", allExamFetcher)
+					.dataFetcher("getExamById",examByIdFetcher)
+					.dataFetcher("getQuestionById",questionByIdFetcher)
+					.dataFetcher("getAllQuestions",allQuestionsFetcher)
+				).build();
 		
 	}
 
-	
-	
-	
 	@GetMapping("/exam")
 	public ResponseEntity<?> getExam(){
 		
@@ -76,8 +90,7 @@ public class GraphQLController {
 	
 	@PostMapping("/gqexam")
 	public ResponseEntity<?> getAll(@RequestBody String query){
-		
-		
+
 		ExecutionResult result = graphQL.execute(query);
 		
 		return new ResponseEntity<>(result,HttpStatus.OK);

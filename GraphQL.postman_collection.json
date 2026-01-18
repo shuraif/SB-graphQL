@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "057dc268-62b1-4a40-b40a-85042a2c2ce5",
+		"name": "GraphQL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30581822"
+	},
+	"item": [
+		{
+			"name": "FetchExamById",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  getExamById(examId:1) {\n    examId\n    examName\n    description\n    minutes\n    questions {\n      questionId\n      question\n      answer\n    }\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/gqexam",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"gqexam"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FetchAllExams",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  getAllExam {\n    examId\n    examName\n    description\n    minutes\n    questions {\n      questionId\n      question\n      answer\n    }\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/gqexam",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"gqexam"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
